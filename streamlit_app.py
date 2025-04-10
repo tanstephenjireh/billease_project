@@ -15,7 +15,7 @@ openai_key = st.secrets['OPENAI_API_KEY']
 if not openai_key:
     raise ValueError("OPENAI_API_KEY is not set in environment variables.")
 
-st.secrets['OPENAI_API_KEY'] = openai_key
+# st.secrets['OPENAI_API_KEY'] = openai_key
 
 
 
