@@ -15,7 +15,6 @@ If the image is blurry or not readable in any way, prompt the user to reupload a
 Answer in a fun tone and engaging for the customer.
 """
 
-# Function to encode the image
 def encode_image(image_pth):
     """Encode uploaded file bytes to base64"""
     print("> encoding image")

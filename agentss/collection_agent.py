@@ -4,25 +4,20 @@ from zoneinfo import ZoneInfo
 from agents import Agent 
 
 def check_ptp_date(ptp_input, value=False):
-    # Use Philippine timezone (PHT)
     pht = ZoneInfo("Asia/Manila")
     today = datetime.now(pht).date()
     current_year = today.year
 
-    # Normalize and clean input
     ptp_input = ptp_input.strip()
 
     try:
-        # Try with full format (e.g., April 15, 2025)
         ptp_date = datetime.strptime(ptp_input, '%B %d, %Y').date()
     except ValueError:
         try:
-            # Try with no year (e.g., April 15), assume current year
             ptp_date = datetime.strptime(f"{ptp_input}, {current_year}", '%B %d, %Y').date()
         except ValueError:
             return "Invalid date format. Please use 'April 15' or 'April 15, 2025'."
 
-    # Compare date difference
     if value == True:
         return (ptp_date - today).days
     elif (ptp_date - today).days > 15:
@@ -34,12 +29,9 @@ def check_ptp_date(ptp_input, value=False):
 def get_customer_info(customers, target_name):
     for customer in customers:
         if customer["name"].lower() == target_name.lower():
-            # Extract and clean the amount
             amount_str = customer["Outstanding amount"]
-            # Remove commas and non-digit characters (like ' pesos')
             amount_int = int(''.join(filter(str.isdigit, amount_str)))
             
-            # Get due date as is (or you can parse it into a date if needed)
             due_date = customer["Due Date"]
             
             return {
@@ -118,5 +110,5 @@ collection_agent = Agent(
     handoff_description="Specialist agent for assisting customer for Promise to Pay (PTP)",
     instructions=collection_instruction,
     model="gpt-4o-mini",
-    tools=[collect_ptp]  # note that we expect a list of tools
+    tools=[collect_ptp]  
 )

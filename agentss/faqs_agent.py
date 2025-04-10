@@ -11,7 +11,6 @@ import streamlit as st
 
 
 tokenizer = tiktoken.get_encoding('cl100k_base')
-# Create the length function
 def tiktoken_len(text):
     tokens = tokenizer.encode(
         text,
@@ -21,7 +20,6 @@ def tiktoken_len(text):
 
 
 def doc_to_pass(docs):
-    # print("> doc_to_pass")
     passage_list = []
     for i, docs in enumerate(docs):
         passage_dic = {}
@@ -33,7 +31,6 @@ def doc_to_pass(docs):
 
 
 def flash_rerank(user_query, passage_list):
-    # print("> flash_rerank")
     ranker = Ranker(model_name="ms-marco-TinyBERT-L-2-v2")
     rerankrequest = RerankRequest(query=user_query, passages=passage_list)
     rank_results = ranker.rerank(rerankrequest)
@@ -42,7 +39,6 @@ def flash_rerank(user_query, passage_list):
 
 
 def retain_first_unique_source(text):
-    # print("> retain_first_unique_source")
     lines = text.splitlines()
     seen_sources = set()
     output = []
@@ -50,7 +46,7 @@ def retain_first_unique_source(text):
         if line.startswith("source:"):
             source_url = line.strip()
             if source_url in seen_sources:
-                continue  # skip repeated source
+                continue  
             seen_sources.add(source_url)
         output.append(line)
     return "\n".join(output)
@@ -63,7 +59,6 @@ def faq(query: str):
     """
     print("> faq")
 
-    # Initialize the embeddings with text-ada-002 model
     embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
     
 
@@ -75,12 +70,9 @@ def faq(query: str):
     docs = db.similarity_search(query, k=20)
 
     passage_list = doc_to_pass(docs)
-    # print(passage_list)
 
     flashrank_ranked_result = flash_rerank(query, passage_list)
-    # print(flashrank_ranked_result)
     flashrank_ranked_result = flashrank_ranked_result[0:10]
-    # print(flashrank_ranked_result)
 
     contexts = [tx['text']+'\n'+'source: '+tx['metadata']['url']+'\n' for tx in flashrank_ranked_result]
     contexts = "\n".join(contexts)

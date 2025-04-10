@@ -8,17 +8,17 @@ from agents import Runner
 from dotenv import load_dotenv
 import os
 
-load_dotenv()  # Load variables from .env file
+load_dotenv()  
 
-openai_key = os.getenv('OPENAI_API_KEY')
-# print("API KEY:", openai_key)  # just to confirm it's loaded
+openai_key = st.secrets['OPENAI_API_KEY']
+
 if not openai_key:
     raise ValueError("OPENAI_API_KEY is not set in environment variables.")
 
-os.environ["OPENAI_API_KEY"] = openai_key
+st.secrets['OPENAI_API_KEY'] = openai_key
 
 
-# Page configuration
+
 st.set_page_config(
     page_title="Billy",
     page_icon="💸",
@@ -26,7 +26,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better styling
+
 st.markdown("""
 <style>
     .chat-message {
@@ -68,7 +68,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# Initialize session state for chat history and user context
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = [{
                 "role": "assistant",
@@ -84,10 +84,8 @@ if "processing_image" not in st.session_state:
 
 
 
-# Function to handle user input
+
 def handle_user_message(user_input: str):
-    # Add user message to chat history immediately
-    # st.write(user_input)
     timestamp = datetime.now().strftime("%I:%M %p")
     st.session_state.chat_history.append({
         "role": "user",
@@ -95,11 +93,8 @@ def handle_user_message(user_input: str):
         "timestamp": timestamp
     })
     
-    # Set the message for processing in the next rerun
     st.session_state.processing_message = user_input.text
 
-    # if len(user_input["files"]) is not None:
-    #     st.session_state.processing_image = user_input["files"][0]
 
 def handle_user_image(user_input: str):
     timestamp = datetime.now().strftime("%I:%M %p")
@@ -110,15 +105,13 @@ def handle_user_image(user_input: str):
         "timestamp": timestamp
     })
 
-    # Set the message for processing in the next rerun
     st.session_state.processing_image = user_input["files"][0]
 
-# Main chat interface
+
 st.title("💸 Billy")
 st.caption("Billease Customer Assistant")
     
 
-# Display chat messages
 for message in st.session_state.chat_history:
     with st.container():
         if message["role"] == "user":
@@ -134,7 +127,6 @@ for message in st.session_state.chat_history:
             </div>
             """, unsafe_allow_html=True)
             
-            # Display the image separately using Streamlit's native image display
             if "image" in message and message["image"] is not None:
                 try:
                     st.image(message["image"], width=300, use_container_width=False)
@@ -154,7 +146,6 @@ for message in st.session_state.chat_history:
             """, unsafe_allow_html=True)
 
 
-# User input
 user_input = st.chat_input("Ask Billy...", accept_file=True, file_type=["png", "jpg"])
 if user_input:
     if len(user_input["files"]) == 0:
@@ -164,31 +155,23 @@ if user_input:
     st.rerun()
 
 
-# Process message if needed
 if st.session_state.processing_message:
     user_input = st.session_state.processing_message
     st.session_state.processing_message = None
 
-    # Process the message asynchronously
     with st.spinner("Thinking..."):
         try:
-            # Prepare input for the agent using chat history
             if len(st.session_state.chat_history) > 1:
-                # Convert chat history to input list format for the agent
                 input_list = []
                 for msg in st.session_state.chat_history:
                     input_list.append({"role": msg["role"], "content": msg["content"]})
             else:
-                # First message
                 input_list = user_input
-                # st.write(input_list)
-            # Run the agent with the input
             result = asyncio.run(Runner.run(
                 starting_agent=faqs_agent, 
                 input=input_list
             ))
 
-            # Add assistant response to chat history
             st.session_state.chat_history.append({
                 "role": "assistant",
                 "content":  result.final_output,
@@ -203,20 +186,15 @@ if st.session_state.processing_message:
                 "timestamp": datetime.now().strftime("%I:%M %p")
             })
 
-        # Force a rerun to display the AI response
         st.rerun()
 
 if st.session_state.processing_image:
-    # st.write(st.session_state.processing_image)
     user_input = st.session_state.processing_image
     st.session_state.processing_image = None
 
-    # Process the message asynchronously
     with st.spinner("Processing image..."):
         try:
             image_analysis = vision_tool(user_input)
-            # print(image_analysis)
-            # Add assistant response to chat history
             st.session_state.chat_history.append({
                 "role": "assistant",
                 "content":  image_analysis,
@@ -230,24 +208,5 @@ if st.session_state.processing_image:
                 "content": error_message,
                 "timestamp": datetime.now().strftime("%I:%M %p")
             })
-
-        # Force a rerun to display the AI response
+            
         st.rerun()
-
-
-
-
-# import streamlit as st
-# from agentss.vision_agent import vision_tool
-
-# # Assuming you have a file uploader in your Streamlit app
-# uploaded_file = st.chat_input("Ask Billy...", accept_file=True, file_type=["png", "jpg"])
-# # uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
-
-# if uploaded_file is not None:
-#     st.write(uploaded_file)
-#     st.write(type(uploaded_file["files"][0]))
-#     # Get the file directly from the uploader component
-#     image_analysis = vision_tool(uploaded_file["files"][0])
-#     # image_analysis = vision_tool(uploaded_file)
-#     st.write(image_analysis)
