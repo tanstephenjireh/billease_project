@@ -9,6 +9,24 @@ from agentss.collection_agent import collection_agent
 
 import streamlit as st
 
+from agents import AsyncOpenAI
+from agents import Agent, OpenAIChatCompletionsModel
+from agents import Agent
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  
+
+openai_key = st.secrets['OPENAI_API_KEY']
+gem_base_url = st.secrets['GEM_BASE_URL']
+gem_api_key = st.secrets['GEM_API_KEY']
+# gem_base_url = os.getenv('GEM_BASE_URL')
+# gem_api_key = os.getenv('GEM_API_KEY')
+
+
+
+
+
 
 tokenizer = tiktoken.get_encoding('cl100k_base')
 def tiktoken_len(text):
@@ -97,12 +115,24 @@ the name of the customer first then the Promise to Pay date. Also to a specialis
 """
 
 
-from agents import Agent
-
-faqs_agent = Agent(
+faqs_agent_openai = Agent(
     name="FAQs Agent",
     instructions=faq_instruction,
     model="gpt-4o-mini",
+    tools=[faq],  # note that we expect a list of tools
+    handoffs=[collection_agent]
+)
+
+
+gemini_client = AsyncOpenAI(base_url=gem_base_url, api_key=gem_api_key)
+
+faqs_agent_gemini = Agent(
+    name="FAQs Agent",
+    instructions=faq_instruction,
+    model=OpenAIChatCompletionsModel( 
+        model="gemini-2.0-flash",
+        openai_client=gemini_client,
+    ),
     tools=[faq],  # note that we expect a list of tools
     handoffs=[collection_agent]
 )

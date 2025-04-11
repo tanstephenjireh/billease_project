@@ -26,3 +26,5 @@ Next Steps:
 - store the customers information in a database
 
 - GPU 
+
+- Traces for monitoring
