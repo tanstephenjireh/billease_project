@@ -90,7 +90,8 @@ def collect_ptp(name: str, ptp_date: str):
             "Due Date": "December 1, 2024"
         }
     ]
-
+    st.write("col_tool:", ptp_date)
+    
     users = [i['name'] for i in customers_information]
 
     check_date_validity = check_ptp_date(ptp_date)
