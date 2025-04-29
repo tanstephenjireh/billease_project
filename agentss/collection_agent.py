@@ -3,8 +3,10 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from agents import Agent
 from openai import OpenAI
+import streamlit as st
 
 def check_ptp_date(ptp_input):
+    st.write("checking ptp...")
     pht = ZoneInfo("Asia/Manila")
     today = datetime.now(pht).date()
 
@@ -60,7 +62,6 @@ def get_customer_info(customers, target_name):
 
 @function_tool
 def collect_ptp(name: str, ptp_date: str):
-    st.write(ptp_date)
     """This is responsible for collecting information about a customer for
     Promise to Pay (PTP) purposes:
     name - name of the customer
