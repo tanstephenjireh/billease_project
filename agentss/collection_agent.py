@@ -2,30 +2,44 @@ from agents import function_tool
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from agents import Agent
-import streamlit as st 
+from openai import OpenAI
 
-def check_ptp_date(ptp_input, value=False):
+def check_ptp_date(ptp_input):
     pht = ZoneInfo("Asia/Manila")
     today = datetime.now(pht).date()
-    current_year = today.year
 
-    ptp_input = ptp_input.strip()
-    st.write("stripped:", ptp_input)
+    client = OpenAI(
+        api_key=st.secrets['OPENAI_API_KEY']
+    )
+
+    system_message = f"""The current date is {today}. Convert any date input format into natural language date into ISO format (YYYY-MM-DD).
+    Always pertain to the preceeding future date.
+    Only return the date format in the response. (e.g., ["2025-04-17", "20205-05-01"])
+    """
+
     try:
-        ptp_date = datetime.strptime(ptp_input, '%B %d, %Y').date()
-        st.write(ptp_date)
-    except ValueError:
-        try:
-            ptp_date = datetime.strptime(f"{ptp_input}, {current_year}", '%B %d, %Y').date()
-        except ValueError:
-            return "Invalid date format. Please use 'April 15' or 'April 15, 2025'."
 
-    if value == True:
-        return (ptp_date - today).days
-    elif (ptp_date - today).days > 15:
-        return "Please advise the customer to move the PTP date to an earlier date."
-    else:
-        return "PTP date is acceptable."
+        # Make the API call
+        resp_date = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": ptp_input}
+            ],
+            temperature=0.0,  # Adjust creativity level (0.0 to 1.0)
+            max_tokens=10,   # Limit response length
+        )
+
+        ptp_date = datetime.strptime(resp_date.choices[0].message.content, "%Y-%m-%d").date()
+
+        if (ptp_date - today).days > 15:
+            return "Please advise the customer to move the PTP date to an earlier date."
+        else:
+            return "PTP date is acceptable."
+        
+
+    except Exception as e:
+         return f"Error generating response: {str(e)}"
     
 
 def get_customer_info(customers, target_name):
@@ -50,7 +64,7 @@ def collect_ptp(name: str, ptp_date: str):
     """This is responsible for collecting information about a customer for
     Promise to Pay (PTP) purposes:
     name - name of the customer
-    ptp_date - the date the customer intend to make payment (PTP date) (e.g., ["2025-04-17", "20205-05-01"])
+    ptp_date - the date the customer intend to make payment (PTP date)
     """
 
     customers_information = [
