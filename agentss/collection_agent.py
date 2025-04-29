@@ -47,7 +47,7 @@ def collect_ptp(name: str, ptp_date: str):
     """This is responsible for collecting information about a customer for
     Promise to Pay (PTP) purposes:
     name - name of the customer
-    ptp_date - the date the customer intend to make payment (PTP date)
+    ptp_date - the date the customer intend to make payment (PTP date) (e.g., ["2025-04-17", "20205-05-01"])
     """
 
     customers_information = [
