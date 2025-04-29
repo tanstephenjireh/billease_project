@@ -34,6 +34,7 @@ def check_ptp_date(ptp_input):
 
         ptp_date = datetime.strptime(resp_date.choices[0].message.content, "%Y-%m-%d").date()
 
+        print(ptp_date)
         if (ptp_date - today).days > 15:
             return "Please advise the customer to move the PTP date to an earlier date."
         else:
