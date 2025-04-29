@@ -31,10 +31,10 @@ def check_ptp_date(ptp_input):
             temperature=0.0,  # Adjust creativity level (0.0 to 1.0)
             max_tokens=10,   # Limit response length
         )
-
+        st.write(resp_date)
         ptp_date = datetime.strptime(resp_date.choices[0].message.content, "%Y-%m-%d").date()
 
-        print(ptp_date)
+        st.write(ptp_date)
         if (ptp_date - today).days > 15:
             return "Please advise the customer to move the PTP date to an earlier date."
         else:
