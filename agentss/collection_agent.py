@@ -34,11 +34,12 @@ def check_ptp_date(ptp_input):
         st.write(resp_date.choices[0].message.content)
         ptp_date = datetime.strptime(resp_date.choices[0].message.content, "%Y-%m-%d").date()
 
+        leeway = (ptp_date - today).days
         st.write(ptp_date)
-        if (ptp_date - today).days > 15:
+        if leeway > 15:
             return "Please advise the customer to move the PTP date to an earlier date."
         else:
-            return "PTP date is acceptable."
+            return "PTP date is acceptable.", leeway
         
 
     except Exception as e:
@@ -89,10 +90,10 @@ def collect_ptp(name: str, ptp_date: str):
     if name.lower() not in users:
         return "Sorry, customer not found"
 
-    elif check_date_validity != "PTP date is acceptable.":
+    elif type(check_date_validity) == str:
         return check_date_validity
-    else:
-        date_difference = check_ptp_date(ptp_date, value=True)
+    elif type(check_date_validity) == tuple:
+        date_difference = check_date_validity[-1]
         if name.lower() == "kim":
             cust_info = get_customer_info(customers_information, name.lower())
             outstanding_amount = cust_info["Outstanding Amount"]
