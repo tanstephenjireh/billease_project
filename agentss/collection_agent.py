@@ -16,7 +16,7 @@ def check_ptp_date(ptp_input):
 
     system_message = f"""The current date is {today}. Convert any date input format into natural language date into ISO format (YYYY-MM-DD).
     Always pertain to the preceeding future date.
-    Only return the date format in the response. (e.g., ["2025-04-17", "20205-05-01"])
+    Only return the date format in the response. (e.g., "yyyy-mm-dd")
     """
 
     try:
