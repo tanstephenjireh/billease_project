@@ -132,6 +132,6 @@ collection_agent = Agent(
     name="Collection Agent",
     handoff_description="Specialist agent for assisting customer for Promise to Pay (PTP)",
     instructions=collection_instruction,
-    model="gpt-4o-mini",
+    model="gpt-4.1",
     tools=[collect_ptp]  
 )

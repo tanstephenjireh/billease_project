@@ -118,7 +118,7 @@ the name of the customer first then the Promise to Pay date. Also to a specialis
 faqs_agent_openai = Agent(
     name="FAQs Agent",
     instructions=faq_instruction,
-    model="gpt-4o-mini",
+    model="gpt-4.1",
     tools=[faq],  # note that we expect a list of tools
     handoffs=[collection_agent]
 )
