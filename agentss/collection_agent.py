@@ -36,6 +36,7 @@ def check_ptp_date(ptp_input):
 
         leeway = (ptp_date - today).days
         st.write(ptp_date)
+        st.write(leeway)
         if leeway > 15:
             return "Please advise the customer to move the PTP date to an earlier date."
         else:
