@@ -7,7 +7,7 @@ A customer chatbot that handles multiple user scenarios
 2. Process user-uploaded images (PNG, JPG)
 3. If a customer wants to make a promise to pay (PTP)
 
-## Key Value
+## 🚀 Key Contributions 
 1. Make agreement with user on PTP
 2. Extract data from receipts of images
 
