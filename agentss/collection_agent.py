@@ -63,19 +63,12 @@ def get_customer_info(customers, target_name):
     return "Customer not found."
 
 
-pht = ZoneInfo("Asia/Manila")
-today = datetime.now(pht).date()
-
 @function_tool
 def collect_ptp(name: str, ptp_date: str):
     f"""This is responsible for collecting information about a customer for
     Promise to Pay (PTP) purposes:
     name - name of the customer
     ptp_date - the date the customer intend to make payment (PTP date)
-
-    The current date is {today}. Convert any date input format into natural language date into ISO format (YYYY-MM-DD).
-        Always pertain to the preceeding future date.
-        Only return the date format in the response. The current year is 2025. (e.g., "2025-mm-dd")
     """
     st.write("col_tool:", ptp_date)
     customers_information = [
@@ -91,7 +84,7 @@ def collect_ptp(name: str, ptp_date: str):
         }
     ]
     st.write("col_tool:", ptp_date)
-    
+
     users = [i['name'] for i in customers_information]
 
     check_date_validity = check_ptp_date(ptp_date)
