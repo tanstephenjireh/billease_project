@@ -6,7 +6,7 @@ from openai import OpenAI
 import streamlit as st
 
 def check_ptp_date(ptp_input):
-    # st.write("checking ptp...")
+    st.write("checking ptp...")
     pht = ZoneInfo("Asia/Manila")
     today = datetime.now(pht).date()
 
@@ -31,12 +31,12 @@ def check_ptp_date(ptp_input):
             temperature=0.0,  # Adjust creativity level (0.0 to 1.0)
             max_tokens=10,   # Limit response length
         )
-        # st.write(resp_date.choices[0].message.content)
+        st.write(resp_date.choices[0].message.content)
         ptp_date = datetime.strptime(resp_date.choices[0].message.content, "%Y-%m-%d").date()
 
         leeway = (ptp_date - today).days
-        # st.write(ptp_date)
-        # st.write(leeway)
+        st.write(ptp_date)
+        st.write(leeway)
         if leeway > 15:
             return "Please advise the customer to move the PTP date to an earlier date."
         else:
@@ -70,7 +70,7 @@ def collect_ptp(name: str, ptp_date: str):
     name - name of the customer
     ptp_date - the date the customer intend to make payment (PTP date)
     """
-    # st.write("col_tool:", ptp_date)
+    st.write("col_tool:", ptp_date)
     customers_information = [
         {
             "name": "kim",
@@ -83,12 +83,12 @@ def collect_ptp(name: str, ptp_date: str):
             "Due Date": "December 1, 2024"
         }
     ]
-    # st.write("col_tool:", ptp_date)
+    st.write("col_tool:", ptp_date)
 
     users = [i['name'] for i in customers_information]
 
     check_date_validity = check_ptp_date(ptp_date)
-    # st.write(check_date_validity)
+    st.write(check_date_validity)
     if name.lower() not in users:
         return "Sorry, customer not found"
 
