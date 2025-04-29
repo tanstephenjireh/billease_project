@@ -1,7 +1,8 @@
 from agents import function_tool
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from agents import Agent 
+from agents import Agent
+import streamlit as st 
 
 def check_ptp_date(ptp_input, value=False):
     pht = ZoneInfo("Asia/Manila")
@@ -9,9 +10,10 @@ def check_ptp_date(ptp_input, value=False):
     current_year = today.year
 
     ptp_input = ptp_input.strip()
-
+    st.write("stripped:", ptp_input)
     try:
         ptp_date = datetime.strptime(ptp_input, '%B %d, %Y').date()
+        st.write(ptp_date)
     except ValueError:
         try:
             ptp_date = datetime.strptime(f"{ptp_input}, {current_year}", '%B %d, %Y').date()
@@ -44,7 +46,7 @@ def get_customer_info(customers, target_name):
 
 @function_tool
 def collect_ptp(name: str, ptp_date: str):
-    print(ptp_date)
+    st.write(ptp_date)
     """This is responsible for collecting information about a customer for
     Promise to Pay (PTP) purposes:
     name - name of the customer
