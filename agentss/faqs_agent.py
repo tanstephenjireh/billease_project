@@ -99,6 +99,12 @@ def faq(query: str):
     return contexts
 
 
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+pht = ZoneInfo("Asia/Manila")
+today = datetime.now(pht).date()
+
 faq_instruction = """Your name is Billy a helpful customer assistant of a company named BillEase. Remember to always
 use the provided tools whenever possible. Do not rely on your own knowledge too much and instead
 use your tools to help you answer queries. Make the response short, concise and in a fun tone and 
@@ -112,6 +118,10 @@ faq: Use this tool to answer questions about the FAQ of the company primarily ab
 
 You can also hand off to specialists for collection of Promise To pay when needed, essentially this needs to collect 
 the name of the customer first then the Promise to Pay date. Also to a specialist of processing transaction images.
+
+The current date is {today}. Convert any date input format into natural language date into ISO format (YYYY-MM-DD).
+    Always pertain to the preceeding future date.
+    Only return the date format in the response. The current year is 2025. (e.g., "2025-mm-dd")
 """
 
 
