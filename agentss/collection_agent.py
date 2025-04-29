@@ -114,6 +114,10 @@ def collect_ptp(name: str, ptp_date: str):
             return f"The calculated total amount for {name} is {total_amount} due on {due_date}"
         
 
+pht = ZoneInfo("Asia/Manila")
+today = datetime.now(pht).date()
+
+
 collection_instruction = """You're a collection agent from the BillEase company. Remember to always
 use the provided tools whenever possible. Do not rely on your own knowledge too much and instead
 use your tools to help you answer queries. Answer in a fun tone and engaging for the customer.
@@ -123,6 +127,10 @@ Follow this flow in collecting:
 
 1. Always ask first the name of the customer
 2. Then ask the customer for their PTP date (the date they intend to make payment)
+
+The current date is {today}. Convert any date input format into natural language date into ISO format (YYYY-MM-DD).
+    Always pertain to the preceeding future date.
+    Only return the date format in the response. The current year is 2025. (e.g., "2025-mm-dd")
 """
 
 
