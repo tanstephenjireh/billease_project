@@ -20,6 +20,7 @@ A customer chatbot that handles multiple user scenarios
 [▶️ Watch 2-minute demo on Loom](https://www.loom.com/share/f8aab627420a4bc4a2b584ff3b65200c?sid=0af266a5-a298-4022-8188-db1dba56ebb5)
 
 ## 🧠 Skills Demonstrated
+- RAG
 - AI Agents
 - Natural Language Processing (NLP)
 - Rapid Prototyping
