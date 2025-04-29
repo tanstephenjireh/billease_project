@@ -44,6 +44,7 @@ def get_customer_info(customers, target_name):
 
 @function_tool
 def collect_ptp(name: str, ptp_date: str):
+    print(ptp_date)
     """This is responsible for collecting information about a customer for
     Promise to Pay (PTP) purposes:
     name - name of the customer
