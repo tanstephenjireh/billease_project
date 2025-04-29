@@ -70,7 +70,7 @@ def collect_ptp(name: str, ptp_date: str):
     name - name of the customer
     ptp_date - the date the customer intend to make payment (PTP date)
     """
-
+    st.write("col_tool:", ptp_date)
     customers_information = [
         {
             "name": "kim",
